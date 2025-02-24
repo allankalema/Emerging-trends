@@ -1,0 +1,20 @@
+{% extends 'blockchain/base.html' %}
+
+{% block content %}
+<h2>Hashing: Generate Hashes</h2>
+
+<form method="POST">
+    {% csrf_token %}
+    <input type="text" name="message" placeholder="Enter message to hash" required>
+    <button type="submit">Generate Hashes</button>
+</form>
+
+{% if sha256 %}
+    <div class="block">
+        <p><strong>SHA-256:</strong> {{ sha256 }}</p>
+        <p><strong>SHA3-256:</strong> {{ sha3_256 }}</p>
+        <p><strong>BLAKE2s:</strong> {{ blake2s }}</p>
+        <p><strong>Keccak-256:</strong> {{ keccak_256 }}</p>
+    </div>
+{% endif %}
+{% endblock %}

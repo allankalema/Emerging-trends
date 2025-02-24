@@ -1,0 +1,37 @@
+{% extends 'blockchain/base.html' %}
+
+{% block content %}
+<h2>Digital Signature: Sign & Verify a Message</h2>
+
+<form method="POST">
+    {% csrf_token %}
+    <input type="text" name="message" id="message" placeholder="Enter message to sign" value="{{ message }}" required>
+    <button type="submit">Sign Message</button>
+</form>
+
+{% if signature %}
+    <div class="block">
+        <p><strong>Signature:</strong> {{ signature }}</p>
+        <div style="max-width: 100%; overflow-x: auto;">
+            <p><strong>Private Key (Keep this private!):</strong> {{ private_key }}</p>
+            <p><strong>Public Key (For verification):</strong> {{ public_key }}</p>
+        </div>
+    </div>
+{% endif %}
+
+<form method="POST">
+    {% csrf_token %}
+    <h3>Verify Signature</h3>
+    <input type="text" name="verify_public_key" id="verify_public_key" placeholder="Enter public key" value="{{ public_key }}" required>
+    <input type="text" name="verify_message" id="verify_message" placeholder="Enter original message" value="{{ message }}" required>
+    <input type="text" name="verify_signature" id="verify_signature" placeholder="Enter signature to verify" value="{{ signature }}" required>
+    <button type="submit">Verify Signature</button>
+</form>
+
+{% if verification %}
+    <div class="block">
+        <p>Verification Result: {{ verification }}</p>
+    </div>
+{% endif %}
+
+{% endblock %}

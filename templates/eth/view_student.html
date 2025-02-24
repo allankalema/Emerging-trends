@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>View Student</title>
+</head>
+<body>
+    <h1>View Student Record</h1>
+    <form method="post">
+        {% csrf_token %}
+        <input type="text" name="student_address" placeholder="Student Address" required>
+        <button type="submit">View</button>
+    </form>
+    {% if name %}
+        <h2>Name: {{ name }}</h2>
+        <h2>Student ID: {{ student_id }}</h2>
+        <h3>Address: {{ student_address }}</h3>
+    {% elif error %}
+        <p>{{ error }}</p>
+    {% endif %}
+</body>
+</html>

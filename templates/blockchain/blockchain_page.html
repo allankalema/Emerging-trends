@@ -1,0 +1,25 @@
+{% extends 'blockchain/base.html' %}
+
+{% block content %}
+<h2>Blockchain: Mine a New Block</h2>
+
+<form method="POST">
+    {% csrf_token %}
+    <input type="text" name="data" placeholder="Enter transaction data" required>
+    <button type="submit">Add Block</button>
+</form>
+
+{% if chain %}
+    <h3>Blockchain:</h3>
+    {% for block in chain %}
+        <div class="block">
+            <p><strong>Block {{ block.index }}</strong></p>
+            <p>Timestamp: {{ block.timestamp }}</p>
+            <p>Data: {{ block.data }}</p>
+            <p>Nonce: {{ block.nonce }}</p>
+            <p>Previous Hash: {{ block.previous_hash }}</p>
+            <p>Hash: {{ block.hash }}</p>
+        </div>
+    {% endfor %}
+{% endif %}
+{% endblock %}

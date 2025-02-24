@@ -56,7 +56,7 @@ def register_student(request):
                 'from': web3.eth.accounts[0],
             })
             web3.eth.wait_for_transaction_receipt(tx_hash)
-            return redirect("wallet_balance")
+            return redirect("view_student")
         except Exception as e:
             print(f"Error: {e}")
     return render(request, "eth/register_student.html")
@@ -65,18 +65,39 @@ def view_student(request):
     if not contract:
         return render(request, "eth/error.html", {"message": "Contract not deployed. Please deploy the contract first."})
 
+    error = None
+    name = None
+    student_id = None
+    student_address = None
+    all_students = []
+
     if request.method == "POST":
         student_address = request.POST.get("student_address")
-        try:
-            name, student_id = contract.functions.getStudent(student_address).call()
-            return render(request, "eth/view_student.html", {
+        if not student_address.startswith("0x") or len(student_address) != 42:
+            error = "Invalid Ethereum address. Address must start with '0x' and be 42 characters long."
+        else:
+            try:
+                name, student_id = contract.functions.getStudent(student_address).call()
+            except Exception as e:
+                error = f"Error retrieving student record: {e}"
+
+    # Retrieve all student addresses
+    try:
+        student_addresses = contract.functions.getAllStudents().call()
+        for address in student_addresses:
+            name, student_id = contract.functions.getStudent(address).call()
+            all_students.append({
                 "name": name,
                 "student_id": student_id,
-                "student_address": student_address,
+                "address": address,
             })
-        except Exception as e:
-            print(f"Error: {e}")
-    return render(request, "eth/view_student.html")
+    except Exception as e:
+        error = f"Error retrieving all students: {e}"
 
-
-
+    return render(request, "eth/view_student.html", {
+        "name": name,
+        "student_id": student_id,
+        "student_address": student_address,
+        "all_students": all_students,
+        "error": error,
+    })

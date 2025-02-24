@@ -10,6 +10,7 @@
         <input type="text" name="student_address" placeholder="Student Address" required>
         <button type="submit">View</button>
     </form>
+
     {% if name %}
         <h2>Name: {{ name }}</h2>
         <h2>Student ID: {{ student_id }}</h2>
@@ -17,5 +18,18 @@
     {% elif error %}
         <p>{{ error }}</p>
     {% endif %}
+
+    <h2>All Students</h2>
+    <ul>
+        {% for student in all_students %}
+            <li>
+                <strong>Name:</strong> {{ student.name }}<br>
+                <strong>Student ID:</strong> {{ student.student_id }}<br>
+                <strong>Address:</strong> {{ student.address }}
+            </li>
+        {% empty %}
+            <li>No students found.</li>
+        {% endfor %}
+    </ul>
 </body>
 </html>
